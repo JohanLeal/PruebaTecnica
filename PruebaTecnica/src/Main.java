@@ -1,21 +1,15 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
 
-public class Main{
+import Controlador.controlador;
+import Modelo.modelo;
+import Vista.vista;
 
-    Connection con;
-
-    public void conexion() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "");
-        } catch (Exception e) {
-        }
-    }
-
-    public static void main(String[] args) {
-        Main uwu = new Main();
-
-        uwu.conexion();
+public class Main {
+    public static void main(String[] args) { 
+        modelo mod = new modelo();
+        vista view = new vista();
+        
+        controlador ctrl = new controlador(view,mod);
+        ctrl.iniciar();
+        view.setVisible(true);
     }
 }
