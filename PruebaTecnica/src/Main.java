@@ -1,14 +1,15 @@
 
 import Controlador.controlador;
 import Modelo.modelo;
-import Vista.vista;
+import Vista.CrearCuenta;
+import Vista.Index;
 
 public class Main {
     public static void main(String[] args) { 
         modelo mod = new modelo();
-        vista view = new vista();
-        
-        controlador ctrl = new controlador(view,mod);
+        Index view = new Index();
+        CrearCuenta regis = new CrearCuenta();
+        controlador ctrl = new controlador(view,mod,regis);
         ctrl.iniciar();
         view.setVisible(true);
     }
