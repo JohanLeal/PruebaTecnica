@@ -118,7 +118,7 @@
                       <Component id="VarMes" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="VarDia" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="22" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="Regis" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
               </Group>
@@ -140,6 +140,9 @@
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="VarName">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -172,6 +175,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="VarApellido">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="VarTDocu">
           <Properties>
@@ -188,8 +194,14 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="VarNDocu">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="VarEmail">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JComboBox" name="VarAno">
           <Properties>

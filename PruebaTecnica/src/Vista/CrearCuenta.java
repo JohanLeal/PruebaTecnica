@@ -13,7 +13,7 @@ import java.sql.*;
 public class CrearCuenta extends javax.swing.JFrame {
     
 
-    
+
     private java.sql.Connection getConnection() throws SQLException{
         return modelo.getInstance();
     }
@@ -45,28 +45,46 @@ public class CrearCuenta extends javax.swing.JFrame {
         }while(i<=30);
     }
 
-    public void mostrar(){
-        System.out.println();
-    }
 
-    public void add() {
+
+    public void add() throws SQLException {
         CrearCuenta regis = new CrearCuenta();
         Calendar Fecha = Calendar.getInstance();
 
-        int dia, mes, anno;
+        //Fecha actual
+        int diaAc, mesAc, annoAc;
+        //Fecha nacimiento
+        int dia, mes, anio;
         String FechaCreacion, FechaNacimiento;
 
-        FechaNacimiento = VarAno.getSelectedItem() + "-" +VarMes.getSelectedItem() + "-" + VarDia.getSelectedItem();
+        dia = Integer.parseInt((String) VarDia.getSelectedItem());
+        mes = Integer.parseInt((String) VarMes.getSelectedItem());
+        anio = Integer.parseInt((String) VarAno.getSelectedItem());
 
-        dia = Fecha.get(Calendar.DATE);
-        mes = Fecha.get(Calendar.MONTH);
-        anno = Fecha.get(Calendar.YEAR);
-        FechaCreacion= anno + "-" + mes + "-" + dia;
+        FechaNacimiento = anio + "-" + mes + "-" + dia;
+
+        diaAc = Fecha.get(Calendar.DATE);
+        mesAc = Fecha.get(Calendar.MONTH)+1;
+        annoAc = Fecha.get(Calendar.YEAR);
+        FechaCreacion= annoAc + "-" + mesAc + "-" + diaAc;
+
+        //Saber si es menor de edad
+        int diferenciaEdad = annoAc-anio;
+        if (mesAc < mes || (mesAc == mes && diaAc < dia)) {
+            diferenciaEdad--;
+        }
+
+        if (diferenciaEdad<18){
+            avisoMenor avi = new avisoMenor();
+            avi.setVisible(true);
+            avi.setLocationRelativeTo(null);
+        }else{
 
 
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement("INSERT INTO clientes (TipoIdentificacion, NumeroIdentificacion, Nombres, Apellidos, Correo, FechaNacimiento, FechaCreacion, FechaModificacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
 
+
+            Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement("INSERT INTO clientes (TipoIdentificacion, NumeroIdentificacion, Nombres, Apellidos, Correo, FechaNacimiento, FechaCreacion, FechaModificacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, (String) VarTDocu.getSelectedItem());
             ps.setString(2, VarNDocu.getText());
             ps.setString(3, VarName.getText());
@@ -75,21 +93,22 @@ public class CrearCuenta extends javax.swing.JFrame {
             ps.setString(6, FechaNacimiento);
             ps.setString(7, FechaCreacion);
             ps.setString(8, FechaCreacion);
-
-            // Execute the INSERT statement
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("Row inserted successfully.");
+                System.out.println("Se inserto");
             } else {
-                System.out.println("Failed to insert row.");
+                System.out.println("No se inserto");
             }
-        } catch (SQLException e) {
-            System.out.println("Error inserting row: " + e.getMessage());
+             }
+
+            Index view = new Index();
+            view.setVisible(true);
+            view.setLocationRelativeTo(null);
+            this.setVisible(false);
         }
-        System.out.println(FechaCreacion);
-        System.out.println(FechaNacimiento);
-    }
+
+
     
     public CrearCuenta() {
         initComponents();
@@ -129,7 +148,11 @@ public class CrearCuenta extends javax.swing.JFrame {
         Regis.setText("Registrarse");
         Regis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RegisActionPerformed(evt);
+                try {
+                    RegisActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -232,7 +255,7 @@ public class CrearCuenta extends javax.swing.JFrame {
                     .addComponent(VarAno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(VarMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(VarDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Regis)
                 .addGap(63, 63, 63))
         );
@@ -251,13 +274,10 @@ public class CrearCuenta extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void RegisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisActionPerformed
+    private void RegisActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_RegisActionPerformed
 
         add();
-        Index view = new Index();
-        view.setVisible(true);
-        view.setLocationRelativeTo(null);
-        this.setVisible(false);
+
         
     }//GEN-LAST:event_RegisActionPerformed
 
@@ -310,12 +330,12 @@ public class CrearCuenta extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Regis;
     public javax.swing.JComboBox<String> VarAno;
-    private javax.swing.JTextField VarApellido;
+    public javax.swing.JTextField VarApellido;
     public javax.swing.JComboBox<String> VarDia;
-    private javax.swing.JTextField VarEmail;
+    public javax.swing.JTextField VarEmail;
     public javax.swing.JComboBox<String> VarMes;
-    private javax.swing.JTextField VarNDocu;
-    private javax.swing.JTextField VarName;
+    public javax.swing.JTextField VarNDocu;
+    public javax.swing.JTextField VarName;
     public javax.swing.JComboBox<String> VarTDocu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

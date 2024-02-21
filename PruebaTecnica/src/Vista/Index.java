@@ -113,7 +113,6 @@ public class Index extends javax.swing.JFrame {
 
     private void pasar_a_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasar_a_cuentaActionPerformed
         Cuenta acount = new Cuenta();
-        acount.setView(this);
         acount.setVisible(true);
         acount.setLocationRelativeTo(null);
         this.setVisible(false);
