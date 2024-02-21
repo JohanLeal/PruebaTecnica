@@ -32,7 +32,7 @@ public class Cuenta extends javax.swing.JFrame {
         ModificarInfo = new javax.swing.JButton();
         borrarCuenta = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        CuentaAhorro = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         back = new javax.swing.JButton();
@@ -60,8 +60,13 @@ public class Cuenta extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Informacion Personal");
 
-        jButton3.setText("Crear cuenta de Ahorros");
-        jButton3.setPreferredSize(new java.awt.Dimension(149, 23));
+        CuentaAhorro.setText("Crear cuenta de Ahorros");
+        CuentaAhorro.setPreferredSize(new java.awt.Dimension(149, 23));
+        CuentaAhorro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CuentaAhorroActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Crear cuenta Corriente");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -95,7 +100,7 @@ public class Cuenta extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CuentaAhorro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
@@ -122,7 +127,7 @@ public class Cuenta extends javax.swing.JFrame {
                                 .addGap(65, 65, 65)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(ModificarInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(CuentaAhorro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -155,6 +160,13 @@ public class Cuenta extends javax.swing.JFrame {
         modcuen.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_ModificarInfoActionPerformed
+
+    private void CuentaAhorroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CuentaAhorroActionPerformed
+        ahorro aho = new ahorro();
+        this.setVisible(false);
+        aho.setVisible(true);
+        aho.setLocationRelativeTo(null);
+    }//GEN-LAST:event_CuentaAhorroActionPerformed
 
     private void borrarCuentaActionPerformed(java.awt.event.ActionEvent evt) {                                             
         eliminarCuenta elicuen = new eliminarCuenta();
@@ -206,10 +218,10 @@ public class Cuenta extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CuentaAhorro;
     private javax.swing.JButton ModificarInfo;
     public javax.swing.JButton back;
     public javax.swing.JButton borrarCuenta;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
