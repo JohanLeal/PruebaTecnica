@@ -1,9 +1,6 @@
 package Modelo;
 
     import Vista.Cuenta;
-    import Vista.Index;
-
-    import java.awt.event.ActionEvent;
     import java.sql.*;
 
     import static java.sql.DriverManager.getConnection;

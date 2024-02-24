@@ -1,6 +1,5 @@
 package Controlador;
 
-
 import Modelo.modelo;
 import Vista.CrearCuenta;
 import Vista.Index;
