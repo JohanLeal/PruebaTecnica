@@ -41,13 +41,9 @@ public class ClientController {
     }
 
     @DeleteMapping( path = "/Borrar/{idCliente}")
-    public String eliminarCliente(@PathVariable("idCliente")int idCliente){
-        boolean ok = this.clientServi.eliminarCliente(idCliente);
-        if(ok){
-            return "Se elimino el usuario con numero de documento: " + idCliente;
-        }else{
-            return "No se pudo eliminar el usuario con numero de documento: " + idCliente;
-        }
+    public void eliminarCliente(@PathVariable("idCliente")int idCliente){
+        this.clientServi.eliminarCliente(idCliente);
+        System.out.println("Se elimino el cliente con id :" + idCliente);
     }
 
 

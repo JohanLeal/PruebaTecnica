@@ -7,11 +7,11 @@ import jakarta.persistence.Id;
 public class Cuentas {
 
     @Id
-    private Integer idClientes;
+    private int idClientes;
 
     private String tipoCuenta;
 
-    private int numeroCuenta;
+    private Long numeroCuenta;
 
     private String estadoCuenta;
 
@@ -23,7 +23,7 @@ public class Cuentas {
 
     private String fechaModificacionCuenta;
 
-    public Integer getIdClientes() {
+    public int getIdClientes() {
         return idClientes;
     }
 
@@ -31,7 +31,7 @@ public class Cuentas {
         return tipoCuenta;
     }
 
-    public int getNumeroCuenta() {
+    public Long getNumeroCuenta() {
         return numeroCuenta;
     }
 
@@ -55,7 +55,7 @@ public class Cuentas {
         return fechaModificacionCuenta;
     }
 
-    public void setIdClientes(Integer idClientes) {
+    public void setIdClientes(int idClientes) {
         this.idClientes = idClientes;
     }
 
@@ -63,7 +63,7 @@ public class Cuentas {
         this.tipoCuenta = tipoCuenta;
     }
 
-    public void setNumeroCuenta(int numeroCuenta) {
+    public void setNumeroCuenta(Long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
 
@@ -85,5 +85,19 @@ public class Cuentas {
 
     public void setFechaModificacionCuenta(String fechaModificacionCuenta) {
         this.fechaModificacionCuenta = fechaModificacionCuenta;
+    }
+
+    @Override
+    public String toString() {
+        return "Cuentas{" +
+                "idClientes=" + idClientes +
+                ", tipoCuenta='" + tipoCuenta + '\'' +
+                ", numeroCuenta=" + numeroCuenta +
+                ", estadoCuenta='" + estadoCuenta + '\'' +
+                ", saldo=" + saldo +
+                ", exentaGMF='" + exentaGMF + '\'' +
+                ", fechaCreacionCuenta='" + fechaCreacionCuenta + '\'' +
+                ", fechaModificacionCuenta='" + fechaModificacionCuenta + '\'' +
+                '}';
     }
 }

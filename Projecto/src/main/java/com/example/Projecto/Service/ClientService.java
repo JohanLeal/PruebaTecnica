@@ -8,7 +8,7 @@ import com.example.Projecto.Repository.AcountRepository;
 import com.example.Projecto.Repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -18,6 +18,9 @@ public class ClientService {
 
     @Autowired
     ClientRepository clientRepository;
+
+    @Autowired
+    AcountRepository acountRepository;
 
 
     public ArrayList<Clientes>ObtenerClientes(){
@@ -47,12 +50,29 @@ public class ClientService {
         return clientRepository.findBynumeroidentificacion(numeroidentificacion);
     }
 
-    public boolean eliminarCliente(int idCliente){
-        try{
-            clientRepository.deleteById(idCliente);
-            return true;
-        }catch(Exception err){
-            return false;
+    public void eliminarCliente(int idCliente){
+        ArrayList<Cuentas>cuentas = acountRepository.findByIdClientes(idCliente);
+        if(cuentas.size()==1){
+            String array = cuentas.toString();
+            int cuentaId;
+            cuentaId = Integer.parseInt(String.valueOf(array.substring(20,21)));
+            if (idCliente == cuentaId){
+                throw new ProductoActivo("No se puede borrar la cuenta, el cliente tiene un producto activo");
+            }
+        }else if (cuentas.size()>0){
+                String array = cuentas.toString();
+                int cuentaId;
+                cuentaId = Integer.parseInt(String.valueOf(array.substring(20,22)));
+                if (idCliente == cuentaId){
+                throw new ProductoActivo("No se puede borrar la cuenta, el cliente tiene un producto activo");
+                }
+        }
+        else{
+            try{
+                clientRepository.deleteById(idCliente);
+            }catch(Exception err){
+                System.out.println(err);
+            }
         }
     }
 }

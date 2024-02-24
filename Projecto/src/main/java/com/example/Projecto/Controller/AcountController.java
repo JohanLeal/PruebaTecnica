@@ -28,4 +28,20 @@ public class AcountController {
     public ArrayList<Cuentas> obtenerCuentas(){
         return acountService.obtenerCuentas();
     }
+
+    @GetMapping("/CuentasId")
+    public ArrayList<Cuentas> obtenerPorId(int idCuentas){
+        return this.acountService.obtenerPorId(idCuentas);
+    }
+
+    /*
+    @GetMapping("/id")
+    public String obtenerId(int idCuentas){
+        return this.acountService.obtenerId(idCuentas);
+    }
+*/
+    @DeleteMapping("/Borrar/{idCliente}")
+    public void borrarCuenta(@PathVariable("idCliente")int idCliente, Cuentas cuentas){
+        this.acountService.borrarCuenta(idCliente, cuentas);
+    }
 }

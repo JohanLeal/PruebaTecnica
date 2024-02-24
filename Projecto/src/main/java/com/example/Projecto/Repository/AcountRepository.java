@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.ArrayList;
 
 public interface AcountRepository extends CrudRepository<Cuentas, Integer> {
-    public ArrayList<Cuentas> findBynumeroCuenta(int numeroCuenta);
+    public ArrayList<Cuentas> findByIdClientes(int idClientes);
 }
