@@ -2,6 +2,7 @@ package com.example.Projecto.Controller;
 
 import com.example.Projecto.Exception.MenorDeEdadException;
 import com.example.Projecto.Model.Clientes;
+import com.example.Projecto.Model.Cuentas;
 import com.example.Projecto.Service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,34 +23,21 @@ public class ClientController {
     public ArrayList<Clientes> ObtenerClientes(){
         return clientServi.ObtenerClientes();
     }
-/*
-    @GetMapping("/{idClientes}")
-    public Date getDateForIden(@PathVariable("idClientes")int idClientes){
-        return this.clientServi.getDateForIden(idClientes);
-    }
-*/
     @PostMapping("/guardarCliente")
     public Clientes GuardarCliente(@RequestBody Clientes client){
-        LocalDate fechaNacimiento = LocalDate.parse(client.getFecha_Nacimiento());
-        LocalDate fechaActual = LocalDate.now();
-        Period periodo = Period.between(fechaNacimiento, fechaActual);
-        int edad = periodo.getYears();
-        if(edad<18){
-            throw new MenorDeEdadException("Cliente menor de edad, no se puede añadir");
-        }else {
-            System.out.println("Registro exitoso");
-        }
         return this.clientServi.GuardarCliente(client);
     }
+
+    @PostMapping("/Clientes/modificarCliente")
+    public Clientes modificarClientes(@RequestBody Clientes clientes){
+        return this.clientServi.modificarClientes(clientes);
+    }
+
+
 
     @GetMapping(path = "/{numeroidentificacion}")
     public ArrayList<Clientes> obtenerPornd(@PathVariable("numeroidentificacion")int numeroidentificacion){
         return this.clientServi.obtenerPornd(numeroidentificacion);
-    }
-
-    @GetMapping(path = "/Cuentas/{numeroCuenta}")
-    public int listarClientes(@PathVariable("numeroCuenta")int numeroCuenta){
-        return this.clientServi.listarCuentas(numeroCuenta);
     }
 
     @DeleteMapping( path = "/Borrar/{idCliente}")

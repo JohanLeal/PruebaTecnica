@@ -24,20 +24,6 @@ public class Clientes {
 
     private String Fecha_Modificacion;
 
-    private String tipoCuenta;
-
-    private int numeroCuenta;
-
-    private String estadoCuenta;
-
-    private int saldo=0;
-
-    private String exentaGMF;
-
-    private String fechaCreacionCuenta;
-
-    private String fechaModificacionCuenta;
-
     public Integer getIdClientes() {
         return idClientes;
     }
@@ -72,34 +58,6 @@ public class Clientes {
 
     public String getFecha_Modificacion() {
         return Fecha_Modificacion;
-    }
-
-    public String getTipoCuenta() {
-        return tipoCuenta;
-    }
-
-    public int getNumeroCuenta() {
-        return numeroCuenta;
-    }
-
-    public String getEstadoCuenta() {
-        return estadoCuenta;
-    }
-
-    public int getSaldo() {
-        return saldo;
-    }
-
-    public String getExentaGMF() {
-        return exentaGMF;
-    }
-
-    public String getFechaCreacionCuenta() {
-        return fechaCreacionCuenta;
-    }
-
-    public String getFechaModificacionCuenta() {
-        return fechaModificacionCuenta;
     }
 
     public void setIdClientes(Integer idClientes) {
@@ -138,31 +96,4 @@ public class Clientes {
         Fecha_Modificacion = fecha_Modificacion;
     }
 
-    public void setTipoCuenta(String tipoCuenta) {
-        this.tipoCuenta = tipoCuenta;
-    }
-
-    public void setNumeroCuenta(int numeroCuenta) {
-        this.numeroCuenta = numeroCuenta;
-    }
-
-    public void setEstadoCuenta(String estadoCuenta) {
-        this.estadoCuenta = estadoCuenta;
-    }
-
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
-    }
-
-    public void setExentaGMF(String exentaGMF) {
-        this.exentaGMF = exentaGMF;
-    }
-
-    public void setFechaCreacionCuenta(String fechaCreacionCuenta) {
-        this.fechaCreacionCuenta = fechaCreacionCuenta;
-    }
-
-    public void setFechaModificacionCuenta(String fechaModificacionCuenta) {
-        this.fechaModificacionCuenta = fechaModificacionCuenta;
-    }
 }
