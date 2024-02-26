@@ -8,4 +8,5 @@ import java.util.ArrayList;
 
 public interface AcountRepository extends CrudRepository<Cuentas, Integer> {
     public ArrayList<Cuentas> findByIdClientes(int idClientes);
+    public Cuentas findByNumeroCuenta(Long numeroCuenta);
 }

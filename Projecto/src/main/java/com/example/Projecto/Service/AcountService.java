@@ -6,12 +6,15 @@ import com.example.Projecto.Model.Cuentas;
 import com.example.Projecto.Repository.AcountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Service
+@Transactional
 public class AcountService {
 
     @Autowired
@@ -49,12 +52,12 @@ public class AcountService {
     }
 
     public Cuentas consignarDinero(int dinero, Cuentas cuentas){
-        cuentas.setSaldo(cuentas.getSaldo()+dinero);
+        cuentas.setSaldo(cuentas.getSaldo() + dinero);
         return acountRepository.save(cuentas);
     }
 
     public Cuentas retirarDinero(int dinero, Cuentas cuentas){
-        if ((cuentas.getSaldo()-dinero)<0){
+        if ((cuentas.getSaldo() - dinero)<0){
             throw new NoTieneDinero("Dinero insuficiente en la cuenta");
         }else {
             cuentas.setSaldo(cuentas.getSaldo()-dinero);
@@ -62,23 +65,29 @@ public class AcountService {
         }
     }
 
-    public void transferirDinero(int dinero, Cuentas cuenta1, Cuentas cuenta2){
-        if((cuenta1.getSaldo()-dinero)<0){
-            throw new NoTieneDinero("Dinero insuficiente para hacer la accion");
-        }else {
+
+    public List<Cuentas> transferirDinero(int dinero, Long numeroCuenta1, Long numeroCuenta2) {
+        Cuentas cuenta1 = acountRepository.findByNumeroCuenta(numeroCuenta1);
+        Cuentas cuenta2 = acountRepository.findByNumeroCuenta(numeroCuenta2);
+        if ((cuenta1.getSaldo() - dinero) < 0) {
+            throw new NoTieneDinero("Dinero insuficiente para hacer la acción");
+        } else {
             cuenta1.setSaldo(cuenta1.getSaldo() - dinero);
             cuenta2.setSaldo(cuenta2.getSaldo() + dinero);
         }
-        acountRepository.save(cuenta1);
-        acountRepository.save(cuenta2);
+        List<Cuentas> cuentasGuardadas = new ArrayList<>();
+        cuentasGuardadas.add(acountRepository.save(cuenta1));
+        cuentasGuardadas.add(acountRepository.save(cuenta2));
+        return cuentasGuardadas;
     }
 
     public void borrarCuenta(int idCliente, Cuentas cuentas){
         int saldo = cuentas.getSaldo();
-        if(saldo==0){
-            acountRepository.deleteById(idCliente);
-        }else{
+        if(saldo>0){
             throw new CuentaActiva("Esta persona tiene dinero en su cuenta!!");
+
+        }else{
+            acountRepository.deleteById(idCliente);
         }
     }
 

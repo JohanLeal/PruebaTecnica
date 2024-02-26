@@ -3,6 +3,8 @@ package com.example.Projecto.Model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+import java.math.BigDecimal;
+
 @Entity
 public class Cuentas {
 
@@ -15,7 +17,7 @@ public class Cuentas {
 
     private String estadoCuenta;
 
-    private int saldo=0;
+    private int saldo;
 
     private String exentaGMF;
 

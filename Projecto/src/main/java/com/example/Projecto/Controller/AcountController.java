@@ -3,9 +3,11 @@ package com.example.Projecto.Controller;
 import com.example.Projecto.Model.Cuentas;
 import com.example.Projecto.Service.AcountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/Cuentas")
@@ -44,9 +46,10 @@ public class AcountController {
         return this.acountService.retirarDinero(dinero, cuentas);
     }
 
-    @PostMapping("/Movimientos/Transferir/{dinero}")
-    public void transferirDinero(@PathVariable("dinero") int dinero, @RequestBody Cuentas cuenta1,@RequestBody Cuentas cuenta2){
-        this.acountService.transferirDinero(dinero, cuenta1, cuenta2);
+    @Transactional
+    @PostMapping("/Movimientos/Transferir/{Dinero}/{NumeroDeCuenta1}/{NumeroDeCuenta2}")
+    public List<Cuentas> transferirDinero (@PathVariable("Dinero") int dinero, @PathVariable("NumeroDeCuenta1") Long numero1, @PathVariable("NumeroDeCuenta2") Long numero2){
+        return this.acountService.transferirDinero(dinero, numero1, numero2);
     }
 
     /*
@@ -55,8 +58,8 @@ public class AcountController {
         return this.acountService.obtenerId(idCuentas);
     }
 */
-    @DeleteMapping("/Borrar/{idCliente}")
-    public void borrarCuenta(@PathVariable("idCliente")int idCliente, Cuentas cuentas){
+    @DeleteMapping("/Borrar")
+    public void borrarCuenta(int idCliente, Cuentas cuentas){
         this.acountService.borrarCuenta(idCliente, cuentas);
     }
 }
