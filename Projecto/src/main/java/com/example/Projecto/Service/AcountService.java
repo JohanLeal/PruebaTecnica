@@ -1,6 +1,7 @@
 package com.example.Projecto.Service;
 
 import com.example.Projecto.Exception.CuentaActiva;
+import com.example.Projecto.Exception.NoTieneDinero;
 import com.example.Projecto.Model.Cuentas;
 import com.example.Projecto.Repository.AcountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,14 +48,31 @@ public class AcountService {
         return acountRepository.findByIdClientes(idClientes);
     }
 
-    /*
-    public String obtenerId(int idClientes){
-        ArrayList<Cuentas>cuentas = acountRepository.findByIdClientes(idClientes);
-        String cuentaId;
-        cuentaId = cuentas.toString();
-        return cuentaId;
+    public Cuentas consignarDinero(int dinero, Cuentas cuentas){
+        cuentas.setSaldo(cuentas.getSaldo()+dinero);
+        return acountRepository.save(cuentas);
     }
-*/
+
+    public Cuentas retirarDinero(int dinero, Cuentas cuentas){
+        if ((cuentas.getSaldo()-dinero)<0){
+            throw new NoTieneDinero("Dinero insuficiente en la cuenta");
+        }else {
+            cuentas.setSaldo(cuentas.getSaldo()-dinero);
+            return acountRepository.save(cuentas);
+        }
+    }
+
+    public void transferirDinero(int dinero, Cuentas cuenta1, Cuentas cuenta2){
+        if((cuenta1.getSaldo()-dinero)<0){
+            throw new NoTieneDinero("Dinero insuficiente para hacer la accion");
+        }else {
+            cuenta1.setSaldo(cuenta1.getSaldo() - dinero);
+            cuenta2.setSaldo(cuenta2.getSaldo() + dinero);
+        }
+        acountRepository.save(cuenta1);
+        acountRepository.save(cuenta2);
+    }
+
     public void borrarCuenta(int idCliente, Cuentas cuentas){
         int saldo = cuentas.getSaldo();
         if(saldo==0){
@@ -62,7 +80,6 @@ public class AcountService {
         }else{
             throw new CuentaActiva("Esta persona tiene dinero en su cuenta!!");
         }
-
     }
 
 }

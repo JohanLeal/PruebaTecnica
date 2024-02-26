@@ -34,6 +34,21 @@ public class AcountController {
         return this.acountService.obtenerPorId(idCuentas);
     }
 
+    @PostMapping("/Movimientos/Consignacion/{dinero}")
+    public Cuentas consignarDinero(@PathVariable("dinero") int dinero,@RequestBody Cuentas cuentas){
+        return this.acountService.consignarDinero(dinero, cuentas);
+    }
+
+    @PostMapping("/Movimientos/Retirar/{dinero}")
+    public Cuentas retirarDinero(@PathVariable("dinero") int dinero,@RequestBody Cuentas cuentas){
+        return this.acountService.retirarDinero(dinero, cuentas);
+    }
+
+    @PostMapping("/Movimientos/Transferir/{dinero}")
+    public void transferirDinero(@PathVariable("dinero") int dinero, @RequestBody Cuentas cuenta1,@RequestBody Cuentas cuenta2){
+        this.acountService.transferirDinero(dinero, cuenta1, cuenta2);
+    }
+
     /*
     @GetMapping("/id")
     public String obtenerId(int idCuentas){
