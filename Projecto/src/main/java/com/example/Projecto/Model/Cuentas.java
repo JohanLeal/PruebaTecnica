@@ -1,19 +1,31 @@
 package com.example.Projecto.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+
 
 @Entity
+@Table(name = "cuentas")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cuentas {
 
     @Id
-    private int idClientes;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idCuentas;
 
     private String tipoCuenta;
 
-    private Long numeroCuenta;
+    private String numeroCuenta;
 
     private String estadoCuenta;
 
@@ -25,81 +37,8 @@ public class Cuentas {
 
     private String fechaModificacionCuenta;
 
-    public int getIdClientes() {
-        return idClientes;
-    }
+    @ManyToOne
+    @JoinColumn(name = "clienteId")
+    private Clientes clientes;
 
-    public String getTipoCuenta() {
-        return tipoCuenta;
-    }
-
-    public Long getNumeroCuenta() {
-        return numeroCuenta;
-    }
-
-    public String getEstadoCuenta() {
-        return estadoCuenta;
-    }
-
-    public int getSaldo() {
-        return saldo;
-    }
-
-    public String getExentaGMF() {
-        return exentaGMF;
-    }
-
-    public String getFechaCreacionCuenta() {
-        return fechaCreacionCuenta;
-    }
-
-    public String getFechaModificacionCuenta() {
-        return fechaModificacionCuenta;
-    }
-
-    public void setIdClientes(int idClientes) {
-        this.idClientes = idClientes;
-    }
-
-    public void setTipoCuenta(String tipoCuenta) {
-        this.tipoCuenta = tipoCuenta;
-    }
-
-    public void setNumeroCuenta(Long numeroCuenta) {
-        this.numeroCuenta = numeroCuenta;
-    }
-
-    public void setEstadoCuenta(String estadoCuenta) {
-        this.estadoCuenta = estadoCuenta;
-    }
-
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
-    }
-
-    public void setExentaGMF(String exentaGMF) {
-        this.exentaGMF = exentaGMF;
-    }
-
-    public void setFechaCreacionCuenta(String fechaCreacionCuenta) {
-        this.fechaCreacionCuenta = fechaCreacionCuenta;
-    }
-
-    public void setFechaModificacionCuenta(String fechaModificacionCuenta) {
-        this.fechaModificacionCuenta = fechaModificacionCuenta;
-    }
-
-    @Override
-    public String toString() {
-        return "Cuentas{" +
-                "idClientes=" + idClientes +
-                ", tipoCuenta='" + tipoCuenta + '\'' +
-                ", numeroCuenta=" + numeroCuenta +
-                ", estadoCuenta='" + estadoCuenta + '\'' +
-                ", saldo=" + saldo +
-                ", exentaGMF='" + exentaGMF + '\'' +
-                ", fechaCreacionCuenta='" + fechaCreacionCuenta + '\'' +
-                ", fechaModificacionCuenta='" + fechaModificacionCuenta + '\'' +
-                '}';
-    }
 }

@@ -1,20 +1,16 @@
-package com.example.Projecto.Model;
+package com.example.Projecto.DTO.Response;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 
-@Entity
-@Table(name = "clientes")
 @Getter
 @Setter
-public class Clientes {
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class ClienteDtoResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idClientes;
 
     private String TipoIdentificacion;
@@ -33,7 +29,5 @@ public class Clientes {
 
     private String Fecha_Modificacion;
 
-    @OneToMany(mappedBy = "clientes", cascade = CascadeType.ALL)
-    private List<Cuentas> idCuentas;
-
+    private List<CuentaDtoResponse> idCuentas;
 }
