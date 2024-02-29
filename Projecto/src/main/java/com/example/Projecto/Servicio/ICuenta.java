@@ -21,7 +21,7 @@ public interface ICuenta {
 
     Object borrarCuenta(int idCuentas);
 
-    CuentaDtoResponse generarNumeroCuenta(CuentaDtoRequest cuentaDtoRequest);
+    Object generarNumeroCuenta(CuentaDtoRequest cuentaDtoRequest);
 
     Cuentas insertarCampos(CuentaDtoRequest cuentaDtoRequest, ClienteDtoRequest clienteDtoRequest);
 

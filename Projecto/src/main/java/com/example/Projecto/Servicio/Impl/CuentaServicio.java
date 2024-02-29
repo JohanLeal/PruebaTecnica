@@ -6,7 +6,7 @@ import com.example.Projecto.Model.Cuentas;
 import com.example.Projecto.DTO.Response.ClienteDtoResponse;
 import com.example.Projecto.DTO.Response.CuentaDtoResponse;
 import com.example.Projecto.Repositorio.CuentaRepositorio;
-import com.example.Projecto.Repositorio.ClienteRpositorio;
+import com.example.Projecto.Repositorio.ClienteRepositorio;
 import com.example.Projecto.Servicio.ICuenta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,105 +23,150 @@ import java.util.Random;
 public class CuentaServicio implements ICuenta {
 
     @Autowired
-    CuentaRepositorio acountRepository;
+    CuentaRepositorio cuentaRepositorio;
 
     @Autowired
-    ClienteRpositorio clientRepository;
+    ClienteRepositorio clienteRepositorio;
 
+    //Se crea el metodo para guardar cuenta pidiendo los datos del clienteDtoRequest y cuentaDtoRequest
     public Object guardarCuenta(CuentaDtoRequest cuentaDtoRequest, ClienteDtoRequest clienteDtoRequest){
-        Optional<Clientes> clientes = clientRepository.findById(clienteDtoRequest.getIdClientes());
+        //Se encuenta el cliente con el id proporcionado en el DTO
+        Optional<Clientes> clientes = clienteRepositorio.findById(clienteDtoRequest.getIdClientes());
+        //validacion de si el cliente existe
         if(clientes.isPresent()){
+            //Se guarda la informacion en un objeto tipo cliente
             Clientes cliente = clientes.get();
+            //Se hace la relacion para enlazar la cuenta
             List<Cuentas> cuentas = cliente.getIdCuentas();
+            //Si el cliente no posee cuentas se realiza la accion
             if (cuentas.isEmpty()){
-                acountRepository.save(insertarCampos(cuentaDtoRequest, clienteDtoRequest));
+                cuentaRepositorio.save(insertarCampos(cuentaDtoRequest, clienteDtoRequest));
             }
+            //Se valdia si el cuente tenga cuentas existentes, ya sea cuenta de ahorro, corriente o amabas
             for(Cuentas cuenta : cuentas){
                 if (cuentaDtoRequest.getTipoCuenta().equalsIgnoreCase(cuenta.getTipoCuenta())){
                     return "Ya posee una cuenta";
                 }else{
-                    acountRepository.save(insertarCampos(cuentaDtoRequest, clienteDtoRequest));
+                    cuentaRepositorio.save(insertarCampos(cuentaDtoRequest, clienteDtoRequest));
                 }
             }
+        //Si no encontro el cliente se realiza la accion
         }else{
             return "No se encontro el cliente";
         }
         return "Se creo el la cuenta";
     }
 
+    //Metodo para modificar cuentas
     public Object modificarCuentas(int idCuenta, ModificarCuentaDtoRequest modificarCuentaDtoRequest){
+        //Se establecen los datos de auditoria
         LocalDate fechaActual = LocalDate.now();
         modificarCuentaDtoRequest.setFechaModificacionCuenta(String.valueOf(fechaActual));
-        return acountRepository.save(modificarCuenta(idCuenta, modificarCuentaDtoRequest)) + "Se modifico el cliente";
+        //Se llama al metodo aparte llamado "modificarCuenta" para que la informacion se confirme
+        // y se guarde correctamente
+        return cuentaRepositorio.save(modificarCuenta(idCuenta, modificarCuentaDtoRequest)) + "Se modifico el cliente";
     }
 
+    //Metodo apra obtener cuentas mediante el idClientes
     public ClienteDtoResponse obtenerCuenta(int idClientes){
+        //Se llama a un metodo externo para obtener el cliente por medio del idClientes
         return obtenerDatos(idClientes);
     }
 
+    //Metodo para consignar dinero en una cuenta existente requiriendo los datos del retirarConsignarDtoRequest
     public Object consignarDinero(RetirarConsignarDtoRequest retirarConsignarDtoRequest){
-        Cuentas cuentas = acountRepository.findByNumeroCuenta(retirarConsignarDtoRequest.getNumeroCuenta());
-        if(cuentas.getSaldo() - retirarConsignarDtoRequest.getDinero()<0){
-            return "Dinero insuficiente";
-        }else{
-            cuentas.setSaldo(cuentas.getSaldo() + retirarConsignarDtoRequest.getDinero());
-            acountRepository.save(cuentas);
-        }
+        //Se obtiene la informacion de la cuenta por medio del numero de cuenta
+        Cuentas cuentas = cuentaRepositorio.findByNumeroCuenta(retirarConsignarDtoRequest.getNumeroCuenta());
+        //Se agrega la cantidad de dinero a la cuenta
+        cuentas.setSaldo(cuentas.getSaldo() + retirarConsignarDtoRequest.getDinero());
+        //Se guarda el estado de la cuenta con el cambio
+        cuentaRepositorio.save(cuentas);
+
         return "Consignacion exitosa";
     }
 
+    //Metodo para retirar dinero
     public Object retirarDinero(RetirarConsignarDtoRequest retirarConsignarDtoRequest){
-        Cuentas cuentas = acountRepository.findByNumeroCuenta(retirarConsignarDtoRequest.getNumeroCuenta());
+        //Se obtiene la informacion de la cuenta por medio del numero de cuenta
+        Cuentas cuentas = cuentaRepositorio.findByNumeroCuenta(retirarConsignarDtoRequest.getNumeroCuenta());
+        //Se hace la validacion de si el dinero en la cuenta es suficiente para realizar la accion
         if ((cuentas.getSaldo() - retirarConsignarDtoRequest.getDinero())<0){
             return "No hay suficiente dinero";
         }else {
+            //Si hay suficiente dinero se hace el retiro correcto del dinero
             cuentas.setSaldo(cuentas.getSaldo()-retirarConsignarDtoRequest.getDinero());
-            acountRepository.save(cuentas);
+            cuentaRepositorio.save(cuentas);
         }
         return "Retiro exitoso";
     }
 
 
+    //Metodo para transferir dinero entre dos cuentas
     public Object transferirDinero(ConsignarDtoRequest consignarDtoRequest) {
-        Cuentas cuenta1 = acountRepository.findByNumeroCuenta(consignarDtoRequest.getNumeroCuenta1());
-        Cuentas cuenta2 = acountRepository.findByNumeroCuenta(consignarDtoRequest.getNumeroCuenta2());
+        //Se pide los 2 numeros de cuenta y se obtiene la informacion
+        Cuentas cuenta1 = cuentaRepositorio.findByNumeroCuenta(consignarDtoRequest.getNumeroCuenta1());
+        Cuentas cuenta2 = cuentaRepositorio.findByNumeroCuenta(consignarDtoRequest.getNumeroCuenta2());
+        //Se hace la validacion del dinero
         if ((cuenta1.getSaldo() - consignarDtoRequest.getDinero()) < 0) {
             return "Dinero insuficiente";
         } else {
+            //Se la resta y la suma del dinero en las cuentas
             cuenta1.setSaldo(cuenta1.getSaldo() - consignarDtoRequest.getDinero());
             cuenta2.setSaldo(cuenta2.getSaldo() + consignarDtoRequest.getDinero());
         }
-        acountRepository.save(cuenta1);
-        acountRepository.save(cuenta2);
+        //Y por ultimo se guardan los cambios realizados
+        cuentaRepositorio.save(cuenta1);
+        cuentaRepositorio.save(cuenta2);
         return "Transferencia exitosa";
     }
 
+    //Metodo para borrar cuentas validando si tienen dinero en ella
     public Object borrarCuenta(int idCuentas){
-        Optional<Cuentas> cuentas = acountRepository.findById(idCuentas);
+        //Se guarda la informacion de la cuenta
+        Optional<Cuentas> cuentas = cuentaRepositorio.findById(idCuentas);
+        //Se trae el dato del dinero en la cuenta
         int saldo = cuentas.get().getSaldo();
+        //Se realiza la validacion
         if(saldo>0){
             return "Error eliminar: dinero disponible en la cuenta";
         }else{
-            acountRepository.deleteById(idCuentas);
+            //Y si todo esta correcto se borra la cuenta
+            cuentaRepositorio.deleteById(idCuentas);
         }
         return "Se borro la cuenta";
     }
 
-    public CuentaDtoResponse generarNumeroCuenta(CuentaDtoRequest cuentaDtoRequest){
+    //Metodo que se usa en la creacion de cuenta para asignar un numero aleatorio al numero de la cuenta
+    public Object generarNumeroCuenta(CuentaDtoRequest cuentaDtoRequest){
+        //Se instancian los objetos a utilizar
         Random random = new Random();
         CuentaDtoResponse cuentaDtoResponse = new CuentaDtoResponse();
-
+        //Se crea una lista con todas la cuentas creadas para validar si el numero de cuenta a crear
+        // no es repetido
+        List<Cuentas> cuentas = cuentaRepositorio.findAll();
+        //Se hace la validacion para las cuentas de tipo ahorros
         if(cuentaDtoRequest.getTipoCuenta().equalsIgnoreCase("Ahorros")){
-            Long numeroCuentaRandom = random.nextLong(99999999-10000000)+10000000;
-            String numeroCuenta = "53" + numeroCuentaRandom;
-
-            cuentaDtoResponse.setNumeroCuenta(numeroCuenta);
-
+            String numeroCuentaRandom = String.valueOf(random.nextLong(99999999-10000000)+10000000);
+            for (Cuentas cuenta : cuentas){
+                if (cuenta.getNumeroCuenta().equalsIgnoreCase(numeroCuentaRandom)){
+                    return "Numero de cuenta ya existe";
+                }else{
+                    String numeroCuenta = "53" + numeroCuentaRandom;
+                    cuentaDtoResponse.setNumeroCuenta(numeroCuenta);
+                }
+            }aa
+        //Se hace la validacion apra las cuentas de tipo corriente
         }else if(cuentaDtoRequest.getTipoCuenta().equalsIgnoreCase("Corriente")){
-            Long numeroCuentaRandom = random.nextLong(99999999-10000000)+10000000;
-            String numeroCuenta = "33" + numeroCuentaRandom;
 
-            cuentaDtoResponse.setNumeroCuenta(numeroCuenta);
+            String numeroCuentaRandom = String.valueOf(random.nextLong(99999999-10000000)+10000000);
+            for (Cuentas cuenta : cuentas){
+                if (cuenta.getNumeroCuenta().equalsIgnoreCase(numeroCuentaRandom)){
+                    return "Numero de cuenta ya existe";
+                }else{
+                    String numeroCuenta = "33" + numeroCuentaRandom;
+                    cuentaDtoResponse.setNumeroCuenta(numeroCuenta);
+                }
+            }
         }
         return cuentaDtoResponse;
     }
@@ -129,9 +174,9 @@ public class CuentaServicio implements ICuenta {
     public Cuentas insertarCampos(CuentaDtoRequest cuentaDtoRequest, ClienteDtoRequest clienteDtoRequest){
         Cuentas cuentas = new Cuentas();
 
-        Clientes clientes = clientRepository.findById(clienteDtoRequest.getIdClientes()).orElse(null);
+        Clientes clientes = clienteRepositorio.findById(clienteDtoRequest.getIdClientes()).orElse(null);
         LocalDate fechaActual = LocalDate.now();
-        CuentaDtoResponse cuentaDtoResponse = generarNumeroCuenta(cuentaDtoRequest);
+        CuentaDtoResponse cuentaDtoResponse = (CuentaDtoResponse) generarNumeroCuenta(cuentaDtoRequest);
         cuentaDtoResponse.setExentaGMF("No");
         cuentaDtoResponse.setEstadoCuenta("Activo");
         cuentaDtoResponse.setFechaCreacionCuenta(String.valueOf((fechaActual)));
@@ -149,7 +194,7 @@ public class CuentaServicio implements ICuenta {
     }
 
     public ClienteDtoResponse obtenerDatos(int idClientes){
-        Clientes clientes = clientRepository.findById(idClientes).orElse(null);
+        Clientes clientes = clienteRepositorio.findById(idClientes).orElse(null);
         ClienteDtoResponse clienteDtoResponse = new ClienteDtoResponse();
 
         clienteDtoResponse.setIdClientes(clientes.getIdClientes());
@@ -185,7 +230,7 @@ public class CuentaServicio implements ICuenta {
     }
 
     public Cuentas modificarCuenta(int idCuenta, ModificarCuentaDtoRequest modificarCuentaDtoRequest){
-        Cuentas cuentas = acountRepository.findById(idCuenta).orElse(null);
+        Cuentas cuentas = cuentaRepositorio.findById(idCuenta).orElse(null);
         cuentas.setEstadoCuenta(modificarCuentaDtoRequest.getEstadoCuenta());
         cuentas.setExentaGMF(modificarCuentaDtoRequest.getExentaGMF());
         return cuentas;
